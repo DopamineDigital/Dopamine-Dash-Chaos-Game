@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dopamine Digital - Dopamine Dash</title>
+    
+    <script>
+        (function() {
+            // القفل: اسم النطاق المسموح به (سلة)
+            const allowedDomain = "salla.sa"; 
+            
+            // فحص بيئة التشغيل
+            const isFramed = window.self !== window.top;
+            const referrer = document.referrer;
+
+            // إذا حاول شخص فتح الرابط مباشرة أو في موقع آخر غير سلة
+            if (!isFramed || !referrer.includes(allowedDomain)) {
+                document.documentElement.innerHTML = `
+                <div style="background:#020617; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px; direction:rtl;">
+                    <h1 style="color:#ec4899; font-size:30px; margin-bottom:20px;">⚠️ وصول غير مصرح به</h1>
+                    <p style="font-size:18px; color:#cbd5e1;">هذه اللعبة حصرية ومحمية لعملاء متجر DopamineDigital فقط.</p>
+                    <a href="https://salla.sa/dopaminedigital" style="display:inline-block; color:#22d3ee; text-decoration:none; border:2px solid #22d3ee; padding:12px 25px; border-radius:15px; margin-top:30px; font-weight:bold;">العودة للمتجر الرسمي</a>
+                </div>`;
+                window.stop();
+            }
+        })();
+
+        // منع النقر الأيمن ومنع اختصارات المطورين لحماية الكود من النسخ
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+                return false;
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; overflow-x: hidden; user-select: none; -webkit-user-select: none; }
+        .glass { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .btn:active { transform: scale(0.90); }
+        
+        .brand-text {
+            background: linear-gradient(to right, #22d3ee, #ffffff, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        @keyframes speed-pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0px #06b6d4); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 15px #06b6d4); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0px #06b6d4); }
+        }
+        .timer-active { animation: speed-pulse 0.6s infinite; }
+
+        .card-enter { animation: slide-up 0.3s ease-out; }
+        @keyframes slide-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .punishment-box { animation: scale-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes scale-in { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .modal-enter { animation: zoom-in 0.3s ease-out; }
+        @keyframes zoom-in { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-[#020617] text-white min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-xl relative">
+        
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl brand-text mb-2 tracking-tighter">DOPAMINE DIGITAL</h1>
+            <h2 class="text-lg md:text-xl font-bold text-white/90">Dopamine Dash ⚡ <span class="text-pink-500">Chaos Game</span></h2>
+        </div>
+
+        <div id="screen-setup" class="screen glass rounded-[2.5rem] p-6 md:p-8 shadow-2xl space-y-6 border-b-8 border-cyan-500/30">
+            <div class="space-y-4">
+                <input id="teamAName" type="text" placeholder="اسم الفريق الأول" class="w-full p-4 md:p-5 bg-slate-900/50 rounded-2xl border border-white/10 text-center font-bold text-lg md:text-xl focus:border-cyan-500 outline-none transition-all">
+                <input id="teamBName" type="text" placeholder="اسم الفريق الثاني" class="w-full p-4 md:p-5 bg-slate-900/50 rounded-2xl border border-white/10 text-center font-bold text-lg md:text-xl focus:border-pink-500 outline-none transition-all">
+            </div>
+            
+            <select id="roundsCount" class="w-full p-4 bg-slate-900/50 rounded-2xl border border-white/10 text-center font-bold appearance-none cursor-pointer">
+                <option value="3">3 جولات</option>
+                <option value="5" selected>5 جولات</option>
+                <option value="10">10 جولات</option>
+            </select>
+
+            <div class="flex flex-col gap-6">
+                <button onclick="initGame()" class="btn w-full bg-gradient-to-br from-cyan-500 to-blue-700 p-5 md:p-6 rounded-2xl font-black text-xl md:text-2xl shadow-xl">
+                    بدء التحدي ⚡
+                </button>
+
+                <div class="flex items-center justify-center gap-10 border-t border-white/5 pt-4">
+                    <button onclick="toggleHelp()" class="flex flex-col items-center gap-1 group transition-all">
+                        <div class="p-3 bg-white/5 rounded-full border border-white/10 group-hover:border-cyan-500/50 group-hover:bg-cyan-500/10 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                        </div>
+                        <span class="text-[9px] font-black text-slate-400 group-hover:text-cyan-400 uppercase tracking-widest">طريقة اللعب</span>
+                    </button>
+
+                    <a href="https://salla.sa/dopaminedigital" target="_blank" class="flex flex-col items-center gap-1 group transition-all">
+                        <div class="p-3 bg-white/5 rounded-full border border-white/10 group-hover:border-pink-500/50 group-hover:bg-pink-500/10 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
+                        <span class="text-[9px] font-black text-slate-400 group-hover:text-pink-500 uppercase tracking-widest text-center">للمزيد من الألعاب</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-round-start" class="screen hidden glass rounded-[2.5rem] p-8 md:p-10 shadow-2xl text-center space-y-6 md:space-y-8">
+            <div class="space-y-2">
+                <div id="roundDisplay" class="text-slate-400 uppercase tracking-widest text-xs font-bold">ROUND 1</div>
+                <div id="turnDisplay" class="text-2xl md:text-3xl font-black">دور الفريق</div>
+            </div>
+            
+            <div class="relative py-8 md:py-12 bg-black/40 rounded-[2rem] border border-white/5 overflow-hidden">
+                <div id="displayLetter" class="text-7xl md:text-9xl font-black text-white leading-none">؟</div>
+                <div id="modifierText" class="mt-6 md:mt-8 text-xl md:text-3xl font-black text-pink-400 px-6 tracking-wide drop-shadow-lg leading-tight">قاعدة الجولة!</div>
+            </div>
+
+            <button onclick="startAction()" class="btn w-full bg-white text-slate-950 p-5 md:p-6 rounded-2xl font-black text-xl md:text-2xl">
+                أنا جاهز! ابدأ ⏱️
+            </button>
+        </div>
+
+        <div id="screen-action" class="screen hidden glass rounded-[2.5rem] p-6 md:p-8 shadow-2xl text-center space-y-6 md:space-y-8 overflow-hidden">
+            <div class="flex justify-between items-center px-2 md:px-4">
+                <div class="text-left">
+                    <div id="activeTeam" class="text-[10px] font-black uppercase text-cyan-400">TEAM NAME</div>
+                    <div id="activeLetter" class="text-4xl md:text-5xl font-black">أ</div>
+                </div>
+                <div id="timerContainer" class="w-16 h-16 md:w-20 md:h-20 bg-cyan-500/20 rounded-full flex items-center justify-center border-2 border-cyan-500/50 timer-active">
+                    <span id="timerText" class="text-2xl md:text-3xl font-black text-cyan-400 font-mono">45</span>
+                </div>
+            </div>
+
+            <div id="categoryCard" class="bg-gradient-to-b from-slate-800 to-slate-900 p-8 md:p-10 rounded-[2.5rem] border-2 border-white/10 shadow-inner card-enter">
+                <div class="text-[10px] text-slate-500 mb-2 uppercase tracking-[0.2em]">أجب بسرعة:</div>
+                <div id="currentCategory" class="text-3xl md:text-5xl font-black text-white drop-shadow-lg font-bold">إنسان</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="markDone()" class="btn bg-emerald-600 p-5 md:p-6 rounded-2xl font-black text-lg md:text-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20">
+                    ✅ تم!
+                </button>
+                <button onclick="skipCategory()" class="btn bg-slate-700 p-5 md:p-6 rounded-2xl font-black text-lg md:text-xl opacity-50">
+                    ⏭️ تخطي
+                </button>
+            </div>
+        </div>
+
+        <div id="screen-final" class="screen hidden glass rounded-[2.5rem] p-6 md:p-8 shadow-2xl text-center space-y-6">
+            <h2 class="text-2xl md:text-3xl font-black brand-text">النتائج النهائية</h2>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between bg-white/5 p-4 md:p-5 rounded-2xl border-r-4 border-cyan-400">
+                    <div id="fNameA" class="font-black text-base md:text-lg uppercase">---</div>
+                    <div id="fScoreA" class="text-xl md:text-2xl font-black text-cyan-400">0</div>
+                </div>
+                <div class="flex items-center justify-between bg-white/5 p-4 md:p-5 rounded-2xl border-r-4 border-pink-500">
+                    <div id="fNameB" class="font-black text-base md:text-lg uppercase">---</div>
+                    <div id="fScoreB" class="text-xl md:text-2xl font-black text-pink-500">0</div>
+                </div>
+            </div>
+
+            <div id="winnerText" class="text-xl md:text-2xl font-black text-yellow-400 drop-shadow-md">---</div>
+
+            <div id="punishmentArea" class="hidden space-y-4 pt-4 border-t border-white/10">
+                <p id="punishmentInstruction" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">يا فريق الفوز، اختر مصير الخاسر!</p>
+                <div class="flex flex-col gap-2">
+                    <button id="drawPunishmentBtn" onclick="drawPunishment()" class="btn w-full bg-gradient-to-r from-red-600 to-orange-600 p-4 rounded-xl font-black text-base md:text-lg shadow-lg">
+                        سحب عقاب عشوائي 😈
+                    </button>
+                    <button id="drawSecondPunishmentBtn" onclick="drawPunishment(true)" class="hidden btn w-full bg-white/10 border border-white/20 p-3 rounded-xl font-bold text-xs">
+                        سحب عقاب آخر (فرصة ثانية) 🔄
+                    </button>
+                </div>
+                <div id="punishmentResult" class="hidden punishment-box p-5 md:p-6 bg-red-500/10 rounded-2xl border-2 border-red-500/50 text-red-400 font-black text-base md:text-lg italic leading-relaxed">
+                    العقاب سيظهر هنا
+                </div>
+            </div>
+
+            <button onclick="resetToSetup()" class="btn w-full bg-white text-slate-950 p-4 rounded-xl font-black text-lg md:text-xl shadow-xl">
+                تحدي جديد 🔄
+            </button>
+        </div>
+    </div>
+
+    <div id="helpModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-6">
+        <div class="glass w-full max-w-md rounded-[2.5rem] p-8 border border-white/20 modal-enter space-y-6 relative overflow-hidden text-right">
+            <h3 class="text-2xl font-black brand-text">كيف نلعب؟ 📝</h3>
+            <div class="space-y-4">
+                <p class="font-bold text-sm">1. حدد الفريقين وعدد الجولات ثم ابدأ التحدي.</p>
+                <p class="font-bold text-sm">2. التزم بـ قاعدة الجولة لضمان احتساب نقاطك.</p>
+                <p class="font-bold text-sm">3. الفائز يختار عقاب الخاسر في النهاية!</p>
+            </div>
+            <button onclick="toggleHelp()" class="btn w-full bg-cyan-600 p-4 rounded-xl font-black text-sm">فهمت! 🚀</button>
+        </div>
+    </div>
+
+    <script>
+        const Sound = {
+            ctx: null,
+            init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+            play(freq, type, duration, vol = 0.1) {
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type; osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + duration);
+            },
+            click() { this.play(800, 'sine', 0.1, 0.05); },
+            success() { this.play(600, 'sine', 0.1, 0.1); setTimeout(() => this.play(900, 'sine', 0.15, 0.1), 50); },
+            start() { this.play(400, 'triangle', 0.1); setTimeout(() => this.play(500, 'triangle', 0.1), 100); setTimeout(() => this.play(600, 'triangle', 0.3), 200); },
+            tick() { this.play(1200, 'sine', 0.05, 0.05); },
+            fail() { this.play(200, 'sawtooth', 0.5, 0.1); },
+            win() { [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => this.play(f, 'sine', 0.4, 0.1), i * 150)); },
+            evil() { this.play(100, 'sawtooth', 0.5, 0.2); setTimeout(() => this.play(80, 'sawtooth', 0.8, 0.2), 300); }
+        };
+
+        const MODIFIERS_LIST = ["جاوب وأنت تضحك بهستيرية", "جاوب وأنت تقفز في مكانك", "جاوب كأنك تبكي", "جاوب وأنت تدور حول نفسك", "جاوب وأنت تصرخ", "جاوب وأنت تغلق عينيك"];
+        const PUNISHMENTS_LIST = ["الوقوف على رجل واحدة دقيقة", "عمل 10 بوش أب", "أكل شريحة ليمون", "أداء رقصة مضحكة"];
+
+        let game = {
+            teams: { A: { name: '', score: 0 }, B: { name: '', score: 0 } },
+            currentTurn: 'A', round: 1, maxRounds: 5, letter: '',
+            usedLetters: [], usedModifiers: [], timer: null, currentCatIndex: 0,
+            categories: ['إنسان', 'حيوان', 'نبات', 'جماد', 'بلاد', 'مهنة', 'أكلة'],
+            letters: "ابتثجحخدذرزسشصضطظعغفقكلمنهوي"
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById('screen-' + id).classList.remove('hidden');
+            Sound.init(); Sound.click();
+        }
+
+        function toggleHelp() {
+            const modal = document.getElementById('helpModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function initGame() {
+            game.teams.A.name = document.getElementById('teamAName').value.trim() || "الفريق الأول";
+            game.teams.B.name = document.getElementById('teamBName').value.trim() || "الفريق الثاني";
+            game.maxRounds = parseInt(document.getElementById('roundsCount').value);
+            game.round = 1; game.currentTurn = 'A'; game.teams.A.score = 0; game.teams.B.score = 0;
+            prepareTurn();
+        }
+
+        function prepareTurn() {
+            let availL = game.letters.split('').filter(l => !game.usedLetters.includes(l));
+            if(!availL.length) { game.usedLetters = []; availL = game.letters.split(''); }
+            game.letter = availL[Math.floor(Math.random() * availL.length)];
+            game.usedLetters.push(game.letter);
+
+            let pickedM = MODIFIERS_LIST[Math.floor(Math.random() * MODIFIERS_LIST.length)];
+            document.getElementById('roundDisplay').innerText = `ROUND ${game.round} / ${game.maxRounds}`;
+            document.getElementById('turnDisplay').innerText = `دور ${game.teams[game.currentTurn].name}`;
+            document.getElementById('displayLetter').innerText = game.letter;
+            document.getElementById('modifierText').innerText = pickedM;
+            showScreen('round-start');
+        }
+
+        function startAction() {
+            game.currentCatIndex = 0; updateCategoryUI();
+            document.getElementById('activeTeam').innerText = game.teams[game.currentTurn].name;
+            document.getElementById('activeLetter').innerText = game.letter;
+            showScreen('action'); Sound.start();
+            let sec = 45; 
+            document.getElementById('timerText').innerText = sec;
+            clearInterval(game.timer);
+            game.timer = setInterval(() => {
+                sec--; document.getElementById('timerText').innerText = sec;
+                if(sec <= 5) Sound.tick();
+                if(sec <= 0) { clearInterval(game.timer); Sound.fail(); nextTurn(); }
+            }, 1000);
+        }
+
+        function updateCategoryUI() {
+            document.getElementById('currentCategory').innerText = game.categories[game.currentCatIndex];
+        }
+
+        function markDone() {
+            Sound.success(); game.teams[game.currentTurn].score += 10;
+            game.currentCatIndex++;
+            if(game.currentCatIndex >= game.categories.length) { clearInterval(game.timer); nextTurn(); }
+            else updateCategoryUI();
+        }
+
+        function skipCategory() { game.currentCatIndex++; if(game.currentCatIndex >= game.categories.length) { clearInterval(game.timer); nextTurn(); } else updateCategoryUI(); }
+
+        function nextTurn() {
+            if(game.currentTurn === 'A') { game.currentTurn = 'B'; prepareTurn(); }
+            else { if(game.round < game.maxRounds) { game.round++; game.currentTurn = 'A'; prepareTurn(); } else finishGame(); }
+        }
+
+        function finishGame() {
+            showScreen('final'); Sound.win();
+            document.getElementById('fNameA').innerText = game.teams.A.name; document.getElementById('fScoreA').innerText = game.teams.A.score;
+            document.getElementById('fNameB').innerText = game.teams.B.name; document.getElementById('fScoreB').innerText = game.teams.B.score;
+            const win = document.getElementById('winnerText');
+            if(game.teams.A.score > game.teams.B.score) win.innerText = `👑 فاز ${game.teams.A.name}!`;
+            else if(game.teams.B.score > game.teams.A.score) win.innerText = `👑 فاز ${game.teams.B.name}!`;
+            else win.innerText = "🤝 تعادل!";
+            document.getElementById('punishmentArea').classList.remove('hidden');
+        }
+
+        function drawPunishment(isSecond = false) {
+            Sound.evil();
+            let pickedP = PUNISHMENTS_LIST[Math.floor(Math.random() * PUNISHMENTS_LIST.length)];
+            const res = document.getElementById('punishmentResult');
+            res.classList.remove('hidden');
+            res.innerText = pickedP;
+            if(!isSecond) {
+                document.getElementById('drawPunishmentBtn').classList.add('hidden');
+                document.getElementById('drawSecondPunishmentBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('drawSecondPunishmentBtn').classList.add('hidden');
+            }
+        }
+
+        function resetToSetup() { showScreen('setup'); }
+    </script>
+</body>
+</html>
