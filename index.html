@@ -4,40 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dopamine Digital - Dopamine Dash</title>
-    
-    <script>
-        (function() {
-            // القفل: اسم النطاق المسموح به (سلة)
-            const allowedDomain = "salla.sa"; 
-            
-            // فحص بيئة التشغيل
-            const isFramed = window.self !== window.top;
-            const referrer = document.referrer;
-
-            // إذا حاول شخص فتح الرابط مباشرة أو في موقع آخر غير سلة
-            if (!isFramed || !referrer.includes(allowedDomain)) {
-                document.documentElement.innerHTML = `
-                <div style="background:#020617; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px; direction:rtl;">
-                    <h1 style="color:#ec4899; font-size:30px; margin-bottom:20px;">⚠️ وصول غير مصرح به</h1>
-                    <p style="font-size:18px; color:#cbd5e1;">هذه اللعبة حصرية ومحمية لعملاء متجر DopamineDigital فقط.</p>
-                    <a href="https://salla.sa/dopaminedigital" style="display:inline-block; color:#22d3ee; text-decoration:none; border:2px solid #22d3ee; padding:12px 25px; border-radius:15px; margin-top:30px; font-weight:bold;">العودة للمتجر الرسمي</a>
-                </div>`;
-                window.stop();
-            }
-        })();
-
-        // منع النقر الأيمن ومنع اختصارات المطورين لحماية الكود من النسخ
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
-                return false;
-            }
-        }
-    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; overflow-x: hidden; user-select: none; -webkit-user-select: none; }
+        body { font-family: 'Cairo', sans-serif; overflow-x: hidden; }
         .glass { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .btn:active { transform: scale(0.90); }
@@ -68,11 +38,37 @@
 </head>
 <body class="bg-[#020617] text-white min-h-screen flex flex-col items-center justify-center p-4">
 
+    <script>
+        (function() {
+            const allowedDomains = [
+                'dopamine-digitals.com',
+                'www.dopamine-digitals.com',
+                'salla.sa',
+                'dopaminedigital.github.io'
+            ];
+            const referrer = document.referrer;
+            if (referrer) {
+                const url = new URL(referrer);
+                const isAllowed = allowedDomains.some(domain => url.hostname.endsWith(domain));
+                if (!isAllowed) {
+                    document.body.innerHTML = `
+                        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding:20px; background:#020617; color:white; font-family:'Cairo', sans-serif;">
+                            <h1 style="color:#ec4899; font-size:2rem; font-weight:900;">وصول غير مصرح به! 🚫</h1>
+                            <p style="margin-top:20px; font-size:1.2rem;">عذراً، هذه اللعبة متاحة فقط لعملاء متجر <strong>DOPAMINE DIGITAL</strong></p>
+                            <a href="https://dopamine-digitals.com" style="margin-top:30px; padding:15px 30px; background:#22d3ee; color:#020617; text-decoration:none; border-radius:15px; font-weight:bold;">انتقل للمتجر الآن</a>
+                        </div>
+                    `;
+                    return;
+                }
+            }
+        })();
+    </script>
+
     <div id="app" class="w-full max-w-xl relative">
         
         <div class="text-center mb-10">
             <h1 class="text-4xl md:text-5xl brand-text mb-2 tracking-tighter">DOPAMINE DIGITAL</h1>
-            <h2 class="text-lg md:text-xl font-bold text-white/90">Dopamine Dash ⚡ <span class="text-pink-500">Chaos Game</span></h2>
+            <h2 class="text-lg md:text-xl font-bold text-white/90 uppercase tracking-tight">Dopamine Dash ⚡ <span class="text-pink-500">Chaos Game</span></h2>
         </div>
 
         <div id="screen-setup" class="screen glass rounded-[2.5rem] p-6 md:p-8 shadow-2xl space-y-6 border-b-8 border-cyan-500/30">
@@ -100,11 +96,11 @@
                         <span class="text-[9px] font-black text-slate-400 group-hover:text-cyan-400 uppercase tracking-widest">طريقة اللعب</span>
                     </button>
 
-                    <a href="https://salla.sa/dopaminedigital" target="_blank" class="flex flex-col items-center gap-1 group transition-all">
+                    <a href="https://dopamine-digitals.com/" target="_blank" class="flex flex-col items-center gap-1 group transition-all">
                         <div class="p-3 bg-white/5 rounded-full border border-white/10 group-hover:border-pink-500/50 group-hover:bg-pink-500/10 transition-all">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                         </div>
-                        <span class="text-[9px] font-black text-slate-400 group-hover:text-pink-500 uppercase tracking-widest text-center">للمزيد من الألعاب</span>
+                        <span class="text-[9px] font-black text-slate-400 group-hover:text-pink-500 uppercase tracking-widest text-center">متجرنا</span>
                     </a>
                 </div>
             </div>
@@ -133,7 +129,7 @@
                     <div id="activeLetter" class="text-4xl md:text-5xl font-black">أ</div>
                 </div>
                 <div id="timerContainer" class="w-16 h-16 md:w-20 md:h-20 bg-cyan-500/20 rounded-full flex items-center justify-center border-2 border-cyan-500/50 timer-active">
-                    <span id="timerText" class="text-2xl md:text-3xl font-black text-cyan-400 font-mono">45</span>
+                    <span id="timerText" class="text-2xl md:text-3xl font-black text-cyan-400 font-mono">30</span>
                 </div>
             </div>
 
@@ -150,6 +146,7 @@
                     ⏭️ تخطي
                 </button>
             </div>
+            <p class="text-xs md:text-sm text-slate-400 italic font-bold text-center">على الفريق الخصم الضغط عند سماع الإجابة الصحيحة</p>
         </div>
 
         <div id="screen-final" class="screen hidden glass rounded-[2.5rem] p-6 md:p-8 shadow-2xl text-center space-y-6">
@@ -183,21 +180,68 @@
                 </div>
             </div>
 
-            <button onclick="resetToSetup()" class="btn w-full bg-white text-slate-950 p-4 rounded-xl font-black text-lg md:text-xl shadow-xl">
-                تحدي جديد 🔄
-            </button>
+            <div class="pt-4 flex flex-col items-center gap-4">
+                <button onclick="resetToSetup()" class="btn w-full bg-white text-slate-950 p-4 rounded-xl font-black text-lg md:text-xl shadow-xl hover:bg-slate-200 transition-colors">
+                    تحدي جديد 🔄
+                </button>
+            </div>
         </div>
     </div>
 
     <div id="helpModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-6">
-        <div class="glass w-full max-w-md rounded-[2.5rem] p-8 border border-white/20 modal-enter space-y-6 relative overflow-hidden text-right">
-            <h3 class="text-2xl font-black brand-text">كيف نلعب؟ 📝</h3>
-            <div class="space-y-4">
-                <p class="font-bold text-sm">1. حدد الفريقين وعدد الجولات ثم ابدأ التحدي.</p>
-                <p class="font-bold text-sm">2. التزم بـ قاعدة الجولة لضمان احتساب نقاطك.</p>
-                <p class="font-bold text-sm">3. الفائز يختار عقاب الخاسر في النهاية!</p>
+        <div class="glass w-full max-w-md rounded-[2.5rem] p-8 border border-white/20 modal-enter space-y-6 relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/20 blur-3xl"></div>
+            
+            <div class="flex justify-between items-center relative text-right">
+                <h3 class="text-2xl font-black brand-text">كيف نلعب؟ 📝</h3>
+                <button onclick="toggleHelp()" class="text-slate-400 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
-            <button onclick="toggleHelp()" class="btn w-full bg-cyan-600 p-4 rounded-xl font-black text-sm">فهمت! 🚀</button>
+
+            <div class="space-y-6 relative text-right">
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center border border-cyan-500/30 flex-shrink-0">
+                        <span class="text-cyan-400 font-black">1</span>
+                    </div>
+                    <p class="font-bold text-sm">حدد الفريقين وعدد الجولات ثم ابدأ التحدي.</p>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 bg-pink-500/20 rounded-xl flex items-center justify-center border border-pink-500/30 flex-shrink-0">
+                        <span class="text-pink-400 font-black">2</span>
+                    </div>
+                    <p class="font-bold text-sm">التزم بـ <span class="text-pink-400 underline decoration-2">قاعدة الجولة</span> (الفوضى) لضمان احتساب نقاطك.</p>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center border border-yellow-500/30 flex-shrink-0">
+                        <span class="text-yellow-400 font-black">3</span>
+                    </div>
+                    <p class="font-bold text-sm">أنهِ الفئات السبعة قبل انتهاء الوقت. الفائز يختار عقاب الخاسر!</p>
+                </div>
+
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/5 space-y-3">
+                    <div class="flex gap-2 items-center text-cyan-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                        <span class="text-xs font-black uppercase tracking-widest">نصائح الدوبامين:</span>
+                    </div>
+                    <p class="text-[10px] text-slate-300 leading-relaxed italic font-bold">
+                        "السرعة هي المفتاح، لا تتردد في التخطّي إذا علقت!"<br>
+                        "الفريق الخصم هو الحَكَم، كن مستعداً للاعتراض!"
+                    </p>
+                </div>
+            </div>
+
+            <button onclick="toggleHelp()" class="btn w-full bg-cyan-600 p-4 rounded-xl font-black text-sm shadow-xl">
+                فهمت، لننطلق! 🚀
+            </button>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 p-4 flex flex-col items-center gap-1 glass border-t border-white/5 z-50">
+        <div class="text-[9px] text-slate-500 uppercase tracking-[0.3em] font-medium">
+            صنع بواسطة <span class="text-cyan-400 font-black">DOPAMINE DIGITAL</span>
         </div>
     </div>
 
@@ -224,13 +268,74 @@
             evil() { this.play(100, 'sawtooth', 0.5, 0.2); setTimeout(() => this.play(80, 'sawtooth', 0.8, 0.2), 300); }
         };
 
-        const MODIFIERS_LIST = ["جاوب وأنت تضحك بهستيرية", "جاوب وأنت تقفز في مكانك", "جاوب كأنك تبكي", "جاوب وأنت تدور حول نفسك", "جاوب وأنت تصرخ", "جاوب وأنت تغلق عينيك"];
-        const PUNISHMENTS_LIST = ["الوقوف على رجل واحدة دقيقة", "عمل 10 بوش أب", "أكل شريحة ليمون", "أداء رقصة مضحكة"];
+        const MODIFIERS_LIST = [
+            "جاوب وأنت تضحك بهستيرية", "جاوب وأنت تقفز في مكانك", "جاوب غلط (قل أي كلمة لا علاقة لها بالفئة)",
+            "جاوب وأنت تجري في مكانك بسرعة", "جاوب وأنت منحني تماماً (متشقلب)", "جاوب كأنك تبكي بحرقة وبصوت عالٍ",
+            "جاوب وأنت تدور حول نفسك بسرعة", "جاوب وأنت تصرخ بأعلى صوتك", "جاوب وأنت تصفق بقوة مع كل حرف",
+            "جاوب وأنت تهز رأسك يميناً ويساراً بجنون", "جاوب وأنت تغلق عينيك تماماً", "جاوب وأنت تخرج لسانك بين الكلمات",
+            "جاوب وأنت تمثل أنك تتلقى لكمات", "جاوب وأنت تقفز كالأرنب", "جاوب وأنت تلهث كأنك تعبت من الجري",
+            "جاوب وأنت تضحك ضحكة شريرة", "جاوب وأنت ترقص رقصة سريعة جداً", "جاوب وأنت تصفق خلف ظهرك",
+            "جاوب وأنت تحاول لمس أذنيك بكتفيك", "جاوب كأنك تغني راب سريع", "جاوب وأنت تمثل أنك تسبح",
+            "جاوب وأنت تنط حبل وهمي بسرعة", "جاوب كأنك في سباق 100 متر", "جاوب وأنت تمثل أنك تلاكم الهواء",
+            "جاوب وأنت تهز رأسك للأمام والخلف", "جاوب كأنك تطلب النجدة بصوت مضحك", "جاوب وأنت تمثل أنك تكنس الأرض",
+            "جاوب وأنت تصفق بيد واحدة على فخذك", "جاوب كأنك تصور مقطع تيك توك راقص", "جاوب وأنت تقلد مشية الروبوت السريعة",
+            "جاوب وأنت تحاول ألا ترمش أبداً", "جاوب كأنك تأكل شيئاً حاراً جداً", "جاوب وأنت تمثل أنك تسحب حبلاً ثقيلاً",
+            "جاوب وأنت تقفز وتدور في الهواء", "جاوب كأنك في فيلم رعب وتلتفت خلفك", "جاوب وأنت تمثل أنك تنظف نافذة",
+            "جاوب كأنك تحاول الإمساك بذبابة مزعجة", "جاوب وأنت تمثل أنك تعزف جيتار كهربائي", "جاوب وأنت تهز خصرك يميناً ويساراً",
+            "جاوب كأنك في عاصفة رملية", "جاوب وأنت تمثل أنك تفتح مظلة رغماً عن الريح", "جاوب وأنت تلمس أصابع قدميك وتصعد",
+            "جاوب كأنك تقفز فوق الحواجز", "جاوب وأنت تمثل أنك تسبح فراشة", "جاوب كأنك تتسلق جبلاً شاهقاً",
+            "جاوب وأنت تهز يديك كأن بهما ماء", "جاوب كأنك تحاول المشي في طين لزج", "جاوب وأنت تمثل أنك تلبس قفازات ضيقة",
+            "جاوب كأنك توازن طبقاً فوق رأسك", "جاوب وأنت تمثل أنك تقص شعرك", "جاوب وأنت تقفز كفارس على حصان",
+            "جاوب كأنك في سباق دراجات", "جاوب وأنت تمثل أنك تلمع حذاءك", "جاوب كأنك لاعب سيرك يوازن كرات",
+            "جاوب وأنت تمثل أنك تفتح باباً عالقاً", "جاوب وأنت تصفق بيديك فوق رأسك", "جاوب كأنك في غابة وتسمع أصواتاً",
+            "جاوب وأنت تمثل أنك نجار يطرق مسماراً", "جاوب كأنك لاعب كرة سلة يراوغ", "جاوب وأنت تمثل أنك تلبس تاجاً",
+            "جاوب كأنك في عرض أزياء سريع", "جاوب وأنت تمثل أنك ترسم لوحة عملاقة", "جاوب كأنك في رحلة صيد وتشد الصنارة",
+            "جاوب وأنت تمثل أنك بطل مصارعة", "جاوب كأنك تقفز من طائرة", "جاوب وأنت تمثل أنك تنفخ ناراً",
+            "جاوب كأنك شيف يقطع البصل بسرعة", "جاوب وأنت تمثل أنك تمسح عرقك بعد ماراثون", "جاوب كأنك في قلب إعصار"
+        ];
+
+        const PUNISHMENTS_LIST = [
+            "الوقوف على رجل واحدة لمدة دقيقة.", "عمل 10 بوش أب (Push-ups) الآن.", "عمل 15 سكوات (Squats) بانتظام.", 
+            "الثبات في وضعية 'البلانك' لمدة 30 ثانية.", "القفز في المكان 20 مرة متتالية.", "الجلوس والقيام بسرعة 10 مرات.", 
+            "رفع اليدين للأعلى والثبات لمدة دقيقة.", "المشي في المكان بسرعة لمدة 45 ثانية.", "لمس الأرض ثم الوقوف بسرعة 10 مرات.", 
+            "التوازن مع إغلاق العينين لمدة 20 ثانية.", "وضع مكعب ثلج على اليد أو الذراع لمدة 20 ثانية.", 
+            "وضع الثلج في الكف ومحاولة التحمل لـ 15 ثانية.", "حمل شيء بارد جداً (ثلج ملفوف) لمدة 30 ثانية.", 
+            "لمس الثلج ثم الاستمرار في اللعب فوراً.", "تمرير الثلج بين اليدين بسرعة 20 مرة.", 
+            "تقليد حركة تمارين رياضية يختارها الفائز.", "التبديل بين الوقوف والجلوس بسرعة 15 مرة.", 
+            "المشي بشكل سريع في المكان مع رفع الركب للأعلى.", "القفز مع التصفيق 10 مرات فوق الرأس.", "الثبات في وضعية 'تمثال رياضي' لدقيقة.",
+            "أكل شريحة ليمون دون تغيير تعبير وجهك.", "أداء رقصة مضحكة لمدة 30 ثانية.", "غناء أغنية حزينة بصوت عالٍ.", 
+            "إلقاء نكتة مضحكة للجميع.", "تغيير بروفايل الواتساب لصورة مضحكة لساعة.", "التكلم بالفصحى فقط لمدة 10 دقائق.", 
+            "رسم شارب بالقلم على وجهك.", "شرب كوب ماء بخلطة يختارها الفائز.", "قول 'بطة بطتنا بطت بطن بطتكم' 5 مرات بسرعة.", 
+            "تنظيف مكان اللعب بالكامل.", "البقاء صامتاً تماماً لمدة 3 دقائق.", "عمل 20 قفزة (Jumping Jacks).", 
+            "تمثيل دور شخص ضائع.", "وصف كل لاعب بكلمة واحدة محرجة.", "محاولة لمس أنفك بلسانك.", "أكل بصلة صغيرة.", 
+            "شرب ملعقة زيت زيتون.", "عمل حركات بهلوانية خفيفة.", "البقاء بوضعية 'القرفصاء' لدقيقة.", 
+            "دع الفائز يدغدغك لـ 10 ثوانٍ.", "تقليد مشية شخص مشهور.", "غناء راب عن خسارتك.", "تمثيل دور مريض في المستشفى.", 
+            "القيام بـ 30 عدة بطن.", "دع الفائز يرسم قلب على جبهتك.", "أكل قطعة خبز جافة بدون ماء.", 
+            "تمثيل دور مذيع جوي.", "قول 'أنا أحب متجر Dopamine Digital' 10 مرات.", "تمثيل دور شخص مرعوب.", 
+            "دع الفائز يختار لك أغنية لترقص عليها.", "محاولة الوقوف على اليدين.", "تمثيل دور عجوز فقد طقمه.", 
+            "أكل ملعقة عسل مع ملح.", "القيام بحركات كاراتيه سريعة.", "تمثيل دور نجار يطرق مسامير.", 
+            "البقاء على وضعية التمثال لمدة 3 دقائق.", "دع الفائز يقرر ماذا تأكل لاحقاً.", "تمثيل دور متسول.", "غناء أغنية أطفال قديمة.", 
+            "دع الفائز يضع الثلج في ملابسك.", "القيام بتمارين البلانك لدقيقة ونصف.", "تمثيل دور رجل إطفاء.", "قول جملة صعبة 10 مرات.", 
+            "تمثيل دور جراح يجري عملية.", "دع الفائز يربط يديك لـ 5 دقائق.", "أكل تفاحة بدون استخدام يديك.", "تمثيل دور مبرمج غاضب.", 
+            "القيام بـ 50 عدة قفز حبل وهمي.", "تمثيل دور عازف جيتار.", "وصف جمال الفريق الفائز لمدة دقيقتين.", 
+            "تمثيل دور شخص فاز باليانصيب.", "دع الفائز يختار لك تسريحة شعر غريبة.", "تمثيل دور نادل في مطعم.", "أكل ملعقة خردل.", 
+            "الوقوف فوق الكرسي والصراخ 'أنا بطل'.", "تمثيل دور شخص ضائع في الصحراء.", "تمثيل دور بطل خارق يطير.", 
+            "كتابة رسالة اعتذار رسمية للفائز.", "الاستسلام لطلبات الفائز لدقيقة واحدة.", 
+            "تمثيل دور شجرة في الريح.", "القيام بحركات يوغا صعبة.", "تمثيل دور مصور فوتوغرافي.", "أكل فلفل حار صغير.", 
+            "تمثيل دور سائق تكسي غاضب.", "البقاء واقفاً في زاوية الغرفة لدقيقتين.", "تمثيل دور شخص يغرق.", 
+            "دع الفائز يختار لك لقباً جديداً اليوم.", "القيام بـ 15 عدة بربي (Burpees).", "تمثيل دور عارض أزياء.", 
+            "تقليد صوت الرعد والبرق بحركات جسدية.", "تمثيل دور شخص يكتشف كنزاً.", "القيام بتمارين لمد العضلات.", 
+            "التمثيل كأنك نينجا يحاول التخفي.", "لمس أصابع قدميك 20 مرة دون ثني الركب.", "تمثيل دور شخص يحاول صيد السمك.",
+            "القيام بحركات الملاكمة في الهواء لدقيقة.", "المشي كأنك رائد فضاء على القمر.", "الوقوف بوضعية 'كرسي وهمي' ضد الجدار لدقيقة.",
+            "القيام بـ 10 قفزات مع لمس الركب للصدر.", "تكرار حركة 'الزحف' في الغرفة مرتين.", "تمثيل وضعية بطل ككمال أجسام لـ 30 ثانية.",
+            "القيام بتمارين الرقبة في كل الاتجاهات 20 مرة.", "محاولة عمل 'جسر' جسدي لمدة 15 ثانية."
+        ];
 
         let game = {
             teams: { A: { name: '', score: 0 }, B: { name: '', score: 0 } },
             currentTurn: 'A', round: 1, maxRounds: 5, letter: '',
-            usedLetters: [], usedModifiers: [], timer: null, currentCatIndex: 0,
+            usedLetters: [], usedModifiers: [], usedPunishments: [],
+            timer: null, currentCatIndex: 0,
             categories: ['إنسان', 'حيوان', 'نبات', 'جماد', 'بلاد', 'مهنة', 'أكلة'],
             letters: "ابتثجحخدذرزسشصضطظعغفقكلمنهوي"
         };
@@ -244,6 +349,7 @@
         function toggleHelp() {
             const modal = document.getElementById('helpModal');
             modal.classList.toggle('hidden');
+            Sound.init(); Sound.click();
         }
 
         function initGame() {
@@ -251,6 +357,7 @@
             game.teams.B.name = document.getElementById('teamBName').value.trim() || "الفريق الثاني";
             game.maxRounds = parseInt(document.getElementById('roundsCount').value);
             game.round = 1; game.currentTurn = 'A'; game.teams.A.score = 0; game.teams.B.score = 0;
+            game.usedLetters = []; game.usedModifiers = []; game.usedPunishments = [];
             prepareTurn();
         }
 
@@ -260,9 +367,15 @@
             game.letter = availL[Math.floor(Math.random() * availL.length)];
             game.usedLetters.push(game.letter);
 
-            let pickedM = MODIFIERS_LIST[Math.floor(Math.random() * MODIFIERS_LIST.length)];
+            let availM = MODIFIERS_LIST.filter(m => !game.usedModifiers.includes(m));
+            if(!availM.length) { game.usedModifiers = []; availM = MODIFIERS_LIST; }
+            let pickedM = availM[Math.floor(Math.random() * availM.length)];
+            game.usedModifiers.push(pickedM);
+
             document.getElementById('roundDisplay').innerText = `ROUND ${game.round} / ${game.maxRounds}`;
-            document.getElementById('turnDisplay').innerText = `دور ${game.teams[game.currentTurn].name}`;
+            const t = game.teams[game.currentTurn];
+            document.getElementById('turnDisplay').innerText = `دور ${t.name}`;
+            document.getElementById('turnDisplay').className = `text-2xl md:text-4xl font-black ${game.currentTurn === 'A' ? 'text-cyan-400' : 'text-pink-500'}`;
             document.getElementById('displayLetter').innerText = game.letter;
             document.getElementById('modifierText').innerText = pickedM;
             showScreen('round-start');
@@ -272,18 +385,20 @@
             game.currentCatIndex = 0; updateCategoryUI();
             document.getElementById('activeTeam').innerText = game.teams[game.currentTurn].name;
             document.getElementById('activeLetter').innerText = game.letter;
-            showScreen('action'); Sound.start();
+            showScreen('action'); Sound.init(); Sound.start();
             let sec = 45; 
             document.getElementById('timerText').innerText = sec;
             clearInterval(game.timer);
             game.timer = setInterval(() => {
                 sec--; document.getElementById('timerText').innerText = sec;
-                if(sec <= 5) Sound.tick();
+                if(sec <= 5) { document.getElementById('timerContainer').classList.add('animate-ping'); Sound.tick(); }
                 if(sec <= 0) { clearInterval(game.timer); Sound.fail(); nextTurn(); }
             }, 1000);
         }
 
         function updateCategoryUI() {
+            const card = document.getElementById('categoryCard');
+            card.classList.remove('card-enter'); void card.offsetWidth; card.classList.add('card-enter');
             document.getElementById('currentCategory').innerText = game.categories[game.currentCatIndex];
         }
 
@@ -294,7 +409,7 @@
             else updateCategoryUI();
         }
 
-        function skipCategory() { game.currentCatIndex++; if(game.currentCatIndex >= game.categories.length) { clearInterval(game.timer); nextTurn(); } else updateCategoryUI(); }
+        function skipCategory() { Sound.click(); game.currentCatIndex++; if(game.currentCatIndex >= game.categories.length) { clearInterval(game.timer); nextTurn(); } else updateCategoryUI(); }
 
         function nextTurn() {
             if(game.currentTurn === 'A') { game.currentTurn = 'B'; prepareTurn(); }
@@ -306,27 +421,48 @@
             document.getElementById('fNameA').innerText = game.teams.A.name; document.getElementById('fScoreA').innerText = game.teams.A.score;
             document.getElementById('fNameB').innerText = game.teams.B.name; document.getElementById('fScoreB').innerText = game.teams.B.score;
             const win = document.getElementById('winnerText');
-            if(game.teams.A.score > game.teams.B.score) win.innerText = `👑 فاز ${game.teams.A.name}!`;
-            else if(game.teams.B.score > game.teams.A.score) win.innerText = `👑 فاز ${game.teams.B.name}!`;
-            else win.innerText = "🤝 تعادل!";
-            document.getElementById('punishmentArea').classList.remove('hidden');
+            const pArea = document.getElementById('punishmentArea');
+            pArea.classList.remove('hidden'); document.getElementById('punishmentResult').classList.add('hidden');
+            document.getElementById('drawPunishmentBtn').classList.remove('hidden');
+            document.getElementById('drawSecondPunishmentBtn').classList.add('hidden');
+
+            if(game.teams.A.score > game.teams.B.score) {
+                win.innerText = `👑 ${game.teams.A.name} فازوا بجدارة!`;
+                document.getElementById('punishmentInstruction').innerText = `يا فريق ${game.teams.A.name}، اختر مصير ${game.teams.B.name}!`;
+            } else if(game.teams.B.score > game.teams.A.score) {
+                win.innerText = `👑 ${game.teams.B.name} فازوا بجدارة!`;
+                document.getElementById('punishmentInstruction').innerText = `يا فريق ${game.teams.B.name}، اختر مصير ${game.teams.A.name}!`;
+            } else { win.innerText = "🤝 تعادل الأساطير!"; pArea.classList.add('hidden'); }
         }
 
         function drawPunishment(isSecond = false) {
             Sound.evil();
-            let pickedP = PUNISHMENTS_LIST[Math.floor(Math.random() * PUNISHMENTS_LIST.length)];
             const res = document.getElementById('punishmentResult');
+            const btn = document.getElementById('drawPunishmentBtn');
+            const secBtn = document.getElementById('drawSecondPunishmentBtn');
+            
+            let availP = PUNISHMENTS_LIST.filter(p => !game.usedPunishments.includes(p));
+            if(!availP.length) { game.usedPunishments = []; availP = PUNISHMENTS_LIST; }
+            let pickedP = availP[Math.floor(Math.random() * availP.length)];
+            game.usedPunishments.push(pickedP);
+            
             res.classList.remove('hidden');
             res.innerText = pickedP;
+            
             if(!isSecond) {
-                document.getElementById('drawPunishmentBtn').classList.add('hidden');
-                document.getElementById('drawSecondPunishmentBtn').classList.remove('hidden');
+                btn.classList.add('hidden');
+                secBtn.classList.remove('hidden');
             } else {
-                document.getElementById('drawSecondPunishmentBtn').classList.add('hidden');
+                secBtn.classList.add('hidden');
             }
         }
 
-        function resetToSetup() { showScreen('setup'); }
+        function resetToSetup() {
+            clearInterval(game.timer);
+            game.usedLetters = []; game.usedModifiers = []; game.usedPunishments = [];
+            game.teams.A.score = 0; game.teams.B.score = 0; game.round = 1; game.currentTurn = 'A';
+            showScreen('setup');
+        }
     </script>
 </body>
 </html>
